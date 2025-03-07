@@ -3,3 +3,4 @@ djangorestframework==3.12.2
 mysqlclient==2.0.1
 django-cors-headers==3.5.0
 pika==1.1.0
+psycopg2-binary==2.8.6
