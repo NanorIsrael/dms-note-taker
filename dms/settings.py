@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/4.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
-
+# import dj_database_url
 from pathlib import Path
 import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -73,7 +73,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'dms.wsgi.application'
 
-
+print('====>', os.getenv('POSTGRES_DB'))
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 DATABASES = {
@@ -87,6 +87,8 @@ DATABASES = {
         'HOST': os.getenv('POSTGRES_HOST', 'db'),  # The service name in docker-compose
         'PORT': os.getenv('POSTGRES_PORT', '5432'),                 # Default PostgreSQL port
     }
+    # 'default': dj_database_url.config(default=os.getenv("DATABASE_URL"))
+
 }
 
 

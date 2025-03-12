@@ -10,26 +10,42 @@ services:
       - postgres_data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
- 
-  rabbitmq:
-    image: rabbitmq:management
-    container_name: rmq
-    ports:
-      - "5672:5672"  # AMQP connection (Required for pika)
-      - "15672:15672"  # Web UI (Optional)
-    environment:
-      RABBITMQ_DEFAULT_USER: guest
-      RABBITMQ_DEFAULT_PASS: guest
+    networks:
+      - rmq_network
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 10s
+      retries: 5
+      start_period: 10s
+
   backend:
     build:
       context: .
       dockerfile: Dockerfile
+    command: 'python manage.py runserver 0.0.0.0:8000'
     ports:
       - 8000:8000
     volumes:
       - .:/app
     depends_on:
       - db
-
+    networks:
+      - rmq_network
+    env_file:
+      - .env
+  
+  queue:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: 'python consumer.py'
+    depends_on:
+      - db
+    networks:
+      - rmq_network
 volumes:
   postgres_data:
+
+networks:
+  rmq_network:
+    external: true 
