@@ -1,14 +1,17 @@
-import pika
+import pika, json
 
 
 connection = pika.BlockingConnection(pika.ConnectionParameters(host='rabbitmq', port=5672))
 channel = connection.channel()
 channel.queue_declare(queue='main')
-def publish():
+
+def publish(method, body):
+	properties = pika.BasicProperties(method)
 	channel.basic_publish(exchange='',
                       routing_key='main',
-                      body='Hello World!')
-	print(" [x] Sent 'Hello World!'")
+                      body=json.dumps(body),
+					  properties=properties)
+	print(" [x] Sent body")
 	# connection.close()
 
 
