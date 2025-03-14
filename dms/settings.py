@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-uf#-y^5tgy8gtv7t6xsoe_(0$59ei@bti1zs*b%76aqzzb!yr-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['host.docker.internal']
 
 
 # Application definition
@@ -81,7 +81,7 @@ DATABASES = {
         # 'ENGINE': 'django.db.backends.sqlite3',
         # 'NAME': BASE_DIR / 'db.sqlite3',
 		'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('POSTGRES_DB', 'dmsdb'),
+        'NAME': os.getenv('POSTGRES_DB', 'dms'),
         'USER': os.getenv('POSTGRES_USER', 'postgres'),
         'PASSWORD': os.getenv('POSTGRES_PASSWORD', 'postgres'),
         'HOST': os.getenv('POSTGRES_HOST', 'db'),  # The service name in docker-compose

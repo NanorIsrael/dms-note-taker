@@ -12,11 +12,6 @@ services:
       - "5432:5432"
     networks:
       - rmq_network
-    healthcheck:
-      test: ["CMD", "pg_isready", "-U", "postgres"]
-      interval: 10s
-      retries: 5
-      start_period: 10s
 
   backend:
     build:
@@ -29,23 +24,20 @@ services:
       - .:/app
     depends_on:
       - db
-    networks:
-      - rmq_network
     env_file:
       - .env
-  
-  queue:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    command: 'python consumer.py'
-    depends_on:
-      - db
     networks:
       - rmq_network
+  # queue:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   command: 'python consumer.py'
+  #   depends_on:
+  #     - db
+
 volumes:
   postgres_data:
-
 networks:
   rmq_network:
-    external: true 
+    external: true
